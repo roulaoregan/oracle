@@ -39,11 +39,12 @@ def OracleClassifier(object):
 		return wordlist.keys()
 	
 	def train(self):
-		self.en_training_set =
+		self.en_training_set = classify.apply_features(self.extract_features, \
+								self.trainer.data['english']['wordlist'])
 		self.fr_training_set = classify.apply_features(self.extract_features, \
-								)
-		self.de_training_set = 
-	
+								self.trainer.data['french']['wordlist'])
+		self.de_training_set = classify.apply_features(self.extract_features, \ 
+								self.trainer.data['german']['wordlist'])
 	def naive_bayes_classifier(self):
 		pass
 
