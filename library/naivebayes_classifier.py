@@ -24,13 +24,14 @@ def OracleClassifier(object):
 		self.root_dir = root_dir
 		self.document = document
 		self.classifier = {'english':None, 'french': None, 'german': None}
-	
+		self.master_word_list = []
+		self.word_features = []
 	
 	# >> REFERENCE:
 	#      http://www.nltk.org/book/ch06.html
 	#      blog: http://www.laurentluce.com/posts/twitter-sentiment-analysis-using-python-and-nltk/
 	###    Test this on the command line!!
-	def extract_features(self, document, master_features):
+	def extract_features(self, document):
 		document_words = set(document)
 		features = {}
 		for word in master_features:
@@ -44,22 +45,31 @@ def OracleClassifier(object):
 	
 	
 	def _assemble(self):
-		pass
+		for (language, wordlist) in self.trainer.data.iteritems():
+			self.master_word_list.append((wordlist, language))
 		
+	def get_words(self):
+		all_words = []
+		for (words, language) in self.master_word_list:
+			all_words.extend(words)
+		return all_words
 	
+	def get_word_features(self, wordlist):
+		wordlist = nltk.FreqDist(wordlist)
+		return wordlist.keys()
+
 	def train(self):
-		self.en_training_set = classify.apply_features(self.extract_features, \
-								self.trainer.data['english']['wordlist'])
-		self.fr_training_set = classify.apply_features(self.extract_features, \
-								self.trainer.data['french']['wordlist'])
-		self.de_training_set = classify.apply_features(self.extract_features, \ 
-								self.trainer.data['german']['wordlist'])
-		self.classifier = {'english': NaiveBayesClassifier.train(self.en_training_set ),
-				   'french': NaiveBayesClassifier.train(self.fr_training_set ),
-				   'german': NaiveBayesClassifier.train(self.de_training_set )
-				   }
-	def naive_bayes_classifier(self):
-		pass
+		self.master_word_list = self._assemble()
+		self.word_features = self.get_word_features(self.get_words())
+
+		self.training_set = classify.apply_features(self.extract_features, self.word_features)
+		#classifier = nltk.NaiveBayesClassifier.train(training_set)
+
+		self.classifier = NaiveBayesClassifier.train(self.training_set )
+		
+	def naive_bayes_classifier(self, input_text):
+		#print classifier.classify(extract_features(tweet.split()))
+		return classifier.classify(self.extract_features(input_text.split()))
 
 
 
