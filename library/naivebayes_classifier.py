@@ -6,11 +6,14 @@ import yaml
 
 import nltk
 from nltk import classify
+from nltk import NaiveBayesClassifier
 from nltk.corpus import europarl_raw, genesis, gutenberg, names, stopwords, words
 from nltk.corpus import PlaintextCorpusReader
 
-from utilities.training import TrainingData
 
+from utilities.training import TrainingData
+# freqDist of training intersection for each language with the freqDist of input text, get closest match
+#
 def OracleClassifier(object):
 	def __init__(self, root_dir, document):
 		self.en_training_set = None
@@ -20,6 +23,7 @@ def OracleClassifier(object):
 		self.trainer.build_training_set()
 		self.root_dir = root_dir
 		self.document = document
+		self.classifier = {'english':None, 'french': None, 'german': None}
 	
 	
 	# >> REFERENCE:
@@ -38,6 +42,11 @@ def OracleClassifier(object):
 		wordlist = nltk.FreqDist(wordlist)
 		return wordlist.keys()
 	
+	
+	def _assemble(self):
+		pass
+		
+	
 	def train(self):
 		self.en_training_set = classify.apply_features(self.extract_features, \
 								self.trainer.data['english']['wordlist'])
@@ -45,6 +54,10 @@ def OracleClassifier(object):
 								self.trainer.data['french']['wordlist'])
 		self.de_training_set = classify.apply_features(self.extract_features, \ 
 								self.trainer.data['german']['wordlist'])
+		self.classifier = {'english': NaiveBayesClassifier.train(self.en_training_set ),
+				   'french': NaiveBayesClassifier.train(self.fr_training_set ),
+				   'german': NaiveBayesClassifier.train(self.de_training_set )
+				   }
 	def naive_bayes_classifier(self):
 		pass
 
