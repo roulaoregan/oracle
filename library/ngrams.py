@@ -9,7 +9,9 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.util import ngrams
 #http://blog.alejandronolla.com/2013/05/20/n-gram-based-text-categorization-categorizing-text-with-python/
 from utilities.training import TrainingData
-
+#
+#
+#https://github.com/z0mbiehunt3r/ngrambased-textcategorizer/blob/master/ngramfreq.py
 tokenizer = RegexpTokenizer("[a-zA-Z'`éèî]+")
 word_list = tokenizer.tokenize("Le temps est un grand maître, dit-on, le malheur est qu'il tue ses élèves.")
 
@@ -70,6 +72,10 @@ class NgramClassifier(object):
 					dictionary[ngram]+= 1
 				except KeyError:
 					dictionary[ngram] = 1
+
+	def _ratios(self):
+		for language, statistics in self.frequencies.iteritems():
+			ngram_statistics = 
 
 	def predict_language(self, input_text):
 		self.input_text = input_text
