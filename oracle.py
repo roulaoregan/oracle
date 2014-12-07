@@ -4,7 +4,9 @@ import sys
 
 
 from optparse import OptionParser
-
+#todo:
+# (1) hook classifiers with arg handlers
+# (2) swap optparse with argparse
 
 
 ##################
