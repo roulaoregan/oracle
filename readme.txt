@@ -11,25 +11,15 @@ in guessing.
 Background:
 There are several research area to solve the problem of language identification, the two broad approaches are feature-based supervised learning and unsupervised evolutionary computation.
 
-APPROACH I - Feature-based Supervised Text Classification  One approach, is to identify and classify certain features that appear in each language, for example, 
-common word elements that occur frequently to a particular language and store it in a database or on disk and use a hash table or database to store pre-processed statistical analysis of the frequency of common words. 
-So that when assessing the input text, the system would take the word intersection of the training set and a set of input text and count the common elements. And which ever language has the most common elements would be the most 
-likely candidate for identifying the unknown language. 
+APPROACH I - Feature-based Supervised Text Classification  One approach, is to identify and classify certain features that appear in each language, for example, common word elements that occur frequently to a particular language and store it in a database or on disk and use a hash table or database to store pre-processed statistical analysis of the frequency of common words. So that when assessing the input text, the system would take the word intersection of the training set and a set of input text and count the common elements. And which ever language has the most common elements would be the most likely candidate for identifying the unknown language. 
 
 Feature Vectors and Classifiers: 
-Typically two phases are involved, a feature construction and feature section phase followed by a learning phase. The classifier is responsible for assigning a category or categories to a given document. In order to accomplish this,
-the classifier needs a set of data as input for each assessment. It builds a feature vector of the most frequently used words and assigns a weight associated with the word. After the system trains the classifier using the obtained 
-feature vectors from a training data set. 
-There are several types of classifiers, following are a few classifiers that were considered.[5]
- Distance Vectors are the simplest classifiers, where for every category and document, there are representative 
- vectors produced. And some measure of the distance must be defined. We can count all the distances between vectors 
- of categories and a document's vector and the category closest to the document is chosen. Often the dot product 
- cosine value of vectors is used instead of distance.  Decision Trees can be used to select certain words based on 
- an information gain criterion and predict categories based on the occurrences of word combination.
+Typically two phases are involved, a feature construction and feature section phase followed by a learning phase. The classifier is responsible for assigning a category or categories to a given document. In order to accomplish this, the classifier needs a set of data as input for each assessment. It builds a feature vector of the most frequently used words and assigns a weight associated with the word. After the system trains the classifier using the obtained feature vectors from a training data set. 
 
-Naive Bayes are probabilistic classifiers which use joint probabilities of words and categories to calculate the category of document. It uses Bayes Theorem with a strong (naive) independence assumptions between the features. 
-This is a very efficient approach, training naive Bayes can be done in linear time if an approximation algorithm is used, as opposed to the expensive iterative approach. This is the most popular approach do to its simpler 
-implementation. [5][6][7] 
+There are several types of classifiers, following are a few classifiers that were considered.[5]
+Distance Vectors are the simplest classifiers, where for every category and document, there are representative vectors produced. And some measure of the distance must be defined. We can count all the distances between vectors of categories and a document's vector and the category closest to the document is chosen. Often the dot product cosine value of vectors is used instead of distance.  Decision Trees can be used to select certain words based on an information gain criterion and predict categories based on the occurrences of word combination.
+
+Naive Bayes are probabilistic classifiers which use joint probabilities of words and categories to calculate the category of document. It uses Bayes Theorem with a strong (naive) independence assumptions between the features. This is a very efficient approach, training naive Bayes can be done in linear time if an approximation algorithm is used, as opposed to the expensive iterative approach. This is the most popular approach do to its simpler implementation. [5][6][7] 
 
 K-nearest neighbours (kNN) classifiers ranks the k-nearest documents from the training set and categorizes documents for prediction.
 
