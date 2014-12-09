@@ -157,4 +157,77 @@ more strategies:
 
 *****Refer to Appendix I for template details
 
+Runtime tool:
+The user is presented with different argument handlers.
+Usage: ****************  Oracle Language Predictor  ****************
+
+Options:
+  -h, --help            show this help message and exit
+  -f FILE, --file=FILE   /path/to/file/text_file.txt
+  -i INPUT, --input=INPUT
+                        "This is input text to be analyzed by Oracle"
+  -b, --naivebayes      "Statistical classifier"
+  -s, --simple          "Simple classifier"
+  -n, --ngram           "N-gram classifier"
+  -e, --sleeper         "Sleeper expert classifier"
+  -u, --unstructured    "Unstructured Text classifier"
+
+From there they can select the classifier strategy and input text
+
+Once the user passes all the information via the command line to ORACLE. For each strategy selected by the user, ORACLE will output a "best guess". The user can select either individual strategies or all strategies to compare the results of each approach.
+
+Input Text Initial Analysis
+Precision of Results: The quality of ORACLE's prediction is heavily dependent on the type of input text and ORACLE will need handle texts from different source types. It is important to note that published literature (fictional or non-fictional) will have different word frequency then short text that is colloquial style (i.e. Twitter tweets, blogs etc). Each strategy comes with it's advantages and disadvantages, for example the N-gram strategy works well with long text but not short texts like Twitter tweets. 
+
+The system needs to first analyze the text based in order to apply the correct strategy. If it is not able to determine the correct strategy it should use default to use all strategies.
+
+Feature Construction:
+The training data will need to be prepared, this can be prior and stored in a configuration file or database and reference during runtime. It can also be constructed during run-time but this will slow down the processing time.
+
+Learning Phase: 
+Once the training data is processed, the system will train the classifier with the produced training set.
+
+Classification:
+After the classifier is training, ORACLE will attempt to classify the given text to assess if it's English, French German or unknown. 
+
+Output: The identified language (English, French, German, Unknown), as well ORACLE will inform how confident it is with it's identification. 
+Implementation Requirements:
+Input Text: Sequence of strings either from a file path or command line. Converts all text into lowercase, remove punctuation and accents.  Language: Python (Cython for increasing the speed of training data preparation)
+
+Libraries: Natural Language Tool Kit (NLTK) for Python
+ 
+Text Corpora and Lexical Resources:    - Gutenberg corpus   - Reuters corpus   - Genesis corpus   - Stop words Corpus
+
+***Toy Example: see attached tar file for some implemented code 
+
+Bibliography:
+ [1] Cavnar, William B. and John M. Trenkle. (1994) "N-Gram-Based Text Categorization". Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis and Information Retrieval   [2] Radim Řehůřek and Milan Kolkus. (2009) "Language Identification on the Web: Extending the Dictionary Method" Computational Linguistics and Intelligent Text Processing  [3] Lars Bungum, Bj ¨orn Gamb¨ack (2010) "Evolutionary Algorithms in Natural Language Processing" Norwegian Artificial Intelligence Symposium, Gjøvik, 22   [4] Benedetto, D., E. Caglioti and V. Loreto. (2002) Language trees and zipping. Physical Review Letters, 88:4 Complexity theory.  [5] Peter Náther. (2005) "N-gram based Text Categorization" (Diploma Thesis) COMENIUS UNIVERSITY FACULTY OF MATHEMATICS, PHYSICS AND INFORMATICS INSTITUTE OF INFORMATICS 
+[6] Charu C. Aggarwal, ChengXiang Zhai. Chapter 6 “A SURVEY OF TEXT CLASSIFICATION ALGORITHMS”. IBM T. J. Watson Research Center, University of Illinois at Urbana-Champaign.
+ Miscellaneous web links:
+
+[7] http://en.wikipedia.org/wiki/Language_identification
+[8] http://blog.alejandronolla.com/2013/05/15/detecting-text-language-with-python-and-nltk/
+[9] http://www.laurentluce.com/posts/twitter-sentiment-analysis-using-python-and-nltk/
+[10]  http://en.wikipedia.org/wiki/Statistical_classification
+[11] http://en.wikipedia.org/wiki/Artificial_neural_network
+[12] http://www.nltk.org/book
+[13] Coursera: Machine Learning Course (Albert Ng's class notes and videos)
+
+
+Appendix I:
+
+configuration files:
+- corpora_directories.yaml
+- pre_processed_training_stats.yaml
+utilities: 	classes:
+- TextAnalysis: analyzing input text, determine if it's a structured or unstructured text and if it's long or short (based on thresholds) text. Given this analysis the system can suggest a specific strategy for the user to use.
+- TrainingData: set up training data for learning phase.
+library:
+	classes:
+Classifier
+- Simple: uses stop words and distance vectors
+- ORACLEClassifier: uses NaiveBayesClassifier, uses feature vectors and measures the frequency of each words per language and compares frequency with input text and assesses the probability based on.
+- NgramClassifier: uses ngrams to parse text and and compares input text with train text profiles and measures how out of place they are from each other. The profile that is least out of place is considered the best match.
+- SleeperExpertClassifier: integrates all classifiers to create a master algorithm. Gathers results from all other classifiers and compares results.
+- UnstructuredClassifier: measure how specific words are using a relevance mapping.
 
