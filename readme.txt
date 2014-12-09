@@ -1,18 +1,15 @@
 ORACLE - Language Identification Predictor 
 
 Purpose:
-Language identification is the problem of determining the language origin of a given document.  
-Automating this identification plays an important role in Natural Language Processing, since a human manual 
+Language identification is the problem of determining the language origin of a given document.  Automating this identification plays an important role in Natural Language Processing, since a human manual 
 processes would consume a lot of time. 
 
 Scope
-The ORACLE system will be responsible for analyzing inputted text and determining its linguistic origin.  
-The system will allow the user to input text and it will output a “best guess” or “unknown” if it's not confident 
+The ORACLE system will be responsible for analyzing inputted text and determining its linguistic origin.  The system will allow the user to input text and it will output a “best guess” or “unknown” if it's not confident 
 in guessing.
 
 Background:
-There are several research area to solve the problem of language identification, the two broad approaches are 
-feature-based supervised learning and unsupervised evolutionary computation.
+There are several research area to solve the problem of language identification, the two broad approaches are feature-based supervised learning and unsupervised evolutionary computation.
 
 APPROACH I - Feature-based Supervised Text Classification 
 One approach, is to identify and classify certain features that appear in each language, for example, 
