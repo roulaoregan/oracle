@@ -9,10 +9,8 @@ from library.classifier import Classifier
 from nltk import wordpunct_tokenize
 from nltk.corpus import stopwords
 
-
-# blog: http://blog.alejandronolla.com/2013/05/15/detecting-text-language-with-python-and-nltk/
-#
-#
+# Simple classifier that uses NLTK stopwords to identify language
+# reference: blog: http://blog.alejandronolla.com/2013/05/15/detecting-text-language-with-python-and-nltk/
 
 class SimpleSimon(Classifier):
 	def __init__(self, input_text):
