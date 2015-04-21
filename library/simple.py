@@ -5,6 +5,7 @@ import sys
 import unicodedata
 import yaml
 
+from library.classifier import Classifier
 from nltk import wordpunct_tokenize
 from nltk.corpus import stopwords
 
@@ -13,12 +14,9 @@ from nltk.corpus import stopwords
 #
 #
 
-class SimpleSimon(object):
-	def __init__(self, input_text, languages=['english', 'french','german']):
-		self.input_text = input_text
-		self.language_ratios = {}
-		self.languages = languages
-		self.best_match = None
+class SimpleSimon(Classifier):
+	def __init__(self, input_text):
+		Classifier.__init__(self, input_text)
 
 	def classify(self):
 		tokens = wordpunct_tokenize(self.input_text)
