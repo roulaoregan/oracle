@@ -5,8 +5,11 @@
 
 class Classifier(object):
 	def __init__(self, input_text, languages=['english', 'french','german']):
-		self.input = input_text
+		self.input_text = input_text
+		self.language_ratios = {}
 		self.languages = languages
+		self.best_match = None
+
 
 	def classify(self, input):
 		pass
