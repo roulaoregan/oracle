@@ -4,45 +4,32 @@ import re
 import sys
 import unicodedata
 import yaml
+import nltk
 
+from library.classifier import Classifier
 from nltk.tokenize import RegexpTokenizer
 from nltk.util import ngrams
-#http://blog.alejandronolla.com/2013/05/20/n-gram-based-text-categorization-categorizing-text-with-python/
 from utilities.training import TrainingData
-#
-#
-#https://github.com/z0mbiehunt3r/ngrambased-textcategorizer/blob/master/ngramfreq.py
-tokenizer = RegexpTokenizer("[a-zA-Z'`éèî]+")
-word_list = tokenizer.tokenize("Le temps est un grand maître, dit-on, le malheur est qu'il tue ses élèves.")
 
-input_text = " ".join(word_list)
-generated_ngrams = ngrams(input_text, 4, pad_left=True, pad_right=True, pad_symbol=' ')
 
-ngram_test3 = ["".join(e.lower() for e in tpl).strip() for tpl in generated_ngrams]
+# Referenced Tutorial:  http://blog.alejandronolla.com/2013/05/20/n-gram-based-text-categorization-categorizing-text-with-python/
+#						https://github.com/z0mbiehunt3r/ngrambased-textcategorizer/blob/master/ngramfreq.py 
 
-ngram_stats = {}
-for ngram in ngram_test3:
-	try:
-		ngram_stats[ngram]+= 1
-	except KeyError:
-		ngram_stats[ngram] = 1
-
-ngram_stats_sorted = sorted(ngram_stats.iteritems(), key=operator.itemgetter(1), reverse=True)
-
-# Pre computed training data
-#
-
-class NgramClassifier(object):
-	def __init__(self, languages=[]):
-		self.tokenizer = RegexpTokenizer("[a-zA-Z'`éèî]+")
-		self.train = TrainingData(languages=['english','french','german'], \
-									nltk_dir="/Users/spiridoulaoregan/nltk_data")
-		self.training_data = {}
-		self.training_stats = {}
-		self.input_text = ""
-		self.frequencies = dict(zip([lang for lang in languages], \
-													[{'frequencies':[]} for x in languages]))
+class NgramClassifier(Classifier):
+	def __init__(self, root_dir, input_text, n=4):
+		Classifier.__init__(self, input_text)
+		self.root_dir = root_dir
+		self.language_ratios = {}
+		self.n = n
+		self.languages = languages
+		self.tokenizer = RegexpTokenizer("[a-zA-Z'`]+")
+		self.train = TrainingData(languages=self.languages, 
+								  config_dir="/Users/spiridoulaoregan/Documents/oracle/python/library/configs", 
+								  root_dir=root_dir)
 		self._train_data()
+		self.input_text = ""
+		self.frequencies = dict(zip([lang for lang in languages], 
+									[{} for x in languages]))
 		self._analyze_data()
 		
 
@@ -53,54 +40,79 @@ class NgramClassifier(object):
 	def _analyze_data(self):
 
 		for language in self.frequencies:
-			wordlist = self._train_data[language]['wordlist']
-			tokens = tokenizer.tokenize(" ".join([w.lower() for w in \
-											self._train_data[language]['wordlist']]))
+			wordlist = self.train.data[language]['wordlist']
 
-			generated_ngrams = ngrams(" ".join(wordlist), 4, pad_left=True, pad_right=True, pad_symbol=' ')
+			generated_ngrams = ngrams(" ".join(wordlist), self.n, pad_left=True, pad_right=True, pad_symbol=' ')
 
-			ngrams = ["".join(e.lower() for e in tpl).strip() for tpl in generated_ngrams]
-			for ngram in ngrams:
+			ngrams_list = ["".join(e.lower() for e in tpl).strip() for tpl in generated_ngrams]
+			for ngram in ngrams_list:
 				try:
-					self.training_stats[ngram]+= 1
+					self.frequencies[language][ngram]+= 1
 				except KeyError:
-					self.training_stats[ngram] = 1
+					self.frequencies[language][ngram] = 1
 
-	def _count(self, ngrams, dictionary):
-			for ngram in ngrams:
-				try:
-					dictionary[ngram]+= 1
-				except KeyError:
-					dictionary[ngram] = 1
 
-	def _ratios(self):
-		for language, statistics in self.frequencies.iteritems():
-			ngram_statistics = 
+	def predict_language(self):
+		""" Will try guessing text's language by computing Ngrams and comparing
+        them against the training data. 
+        Find Minimum`Distance" takes the distance measures from all of the 
+        category profiles to the document profile, and picks the smallest one.
+        """
 
-	def predict_language(self, input_text):
-		self.input_text = input_text
-		tokens = tokenizer.tokenize(input_text)
+		tokens = self.tokenizer.tokenize(self.input_text)
 		generated_ngrams = ngrams(" ".join(["".join(e.lower() for e in tpl).strip() for tpl in tokens]), \
 															4, pad_left=True, pad_right=True, pad_symbol=' ')
 
+		#ngram_stats_sorted = sorted(ngram_stats.iteritems(), key=operator.itemgetter(1), reverse=True)
+		
+		# compare profiles with input text and each language stat
+		for language in self.languages:
+			distance = self.compare_ngram_distances(generated_ngrams,self.frequencies[language])
+			self.language_ratios[language] = distance
+
+		best_match = sorted(self.language_ratios.iteritems(), key=operator.itemgetter(1))
+		return best_match
+
+	def compare_ngram_distances(self, input_profile, training_profile):
+		'''
+		Measure how far out of place an N-gram in one profile is from its
+		place in the other profile.
+		'''
+		document_distance = 0
+		category_ngrams = [ngram[0] for ngram in training_profile] 
+		document_ngrams = [ngram[0] for ngram in input_profile]
+		
+		max_out_order = len(document_ngrams)
+		
+		category_profile_index = None
+		for ngram in document_ngrams:
+			document_index = document_ngrams.index(ngram)
+			try:
+				category_profile_index = category_ngrams.index(ngram)
+
+			except ValueError:
+				category_profile_index = max_out_order
+
+			distance = abs( (category_profile_index - document_index) )
+			document_distance += distance
+
+		return document_distance
+	
+	def classify(self):
+		pass
 
 
 
 def main():
-	root_dir = "/Users/spiridoulaoregan/nltk_data"
-	genesis_text = "The path of the righteous man is beset on all sides by the inequities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of the darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who attempt to poison and destroy My brothers. And you will know I am the Lord when I lay My vengeance upon you."
-	oc = OracleClassifier(root_dir,genesis_text)
-	oc.train()
-	oc.naive_bayes_classifier(genesis_text)
+	root_dir = "../nltk_data"
+	genesis_text = "The path of the righteous man is beset on all sides by the inequities of the \
+					selfish and the tyranny of evil men. Blessed is he who, in the name of charity \
+					and good will, shepherds the weak through the valley of the darkness, for he is \
+					truly his brother's keeper and the finder of lost children. And I will strike \
+					down upon thee with great vengeance and furious anger those who attempt to poison \
+					and destroy My brothers. And you will know I am the Lord when I lay My vengeance upon you."
+	classifier = NgramClassifier(root_dir, languages=['english', 'french','german'])
+	print classifier.predict_language(genesis_text)
 
 if __name__ == "__main__":
 	sys.exit(main())
-
-
-
-
-
-
-
-
-
