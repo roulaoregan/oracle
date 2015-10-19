@@ -3,7 +3,7 @@
 {
 	"dirs":{
 		"CONFIG_DIR": "../oracle/python/configs",
-		"CORPUS_DIR":../nltk_data/corpus",
+		"CORPUS_DIR": "../nltk_data/corpus",
 		"ROOT_DIR": "../nltk_data",
 		"CORPUS_TRAINING_DIR": "../nltk_data/training",
 		"CORPUS_TEST_DIR": "../nltk_data/test_data"
