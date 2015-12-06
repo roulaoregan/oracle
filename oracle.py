@@ -1,3 +1,9 @@
+'''
+ copyright 2014
+ author: Spiridoula O'Regan
+ email: roula.oregan@gmail.com
+ github user: roulaoregan
+'''
 #!/usr/bin/python
 import os
 import re
@@ -7,8 +13,15 @@ import argparse
 from library.naivebayes import OracleClassifier
 from library.simple import SimpleSimon
 from library.ngram_classifier import NgramClassifier
-#@todo: move training data set to preprocess and make threaded, to fasten results
-#
+
+'''
+Simple command line tool that attempts to determine whether the input text language is in 
+either English, French or German.
+
+@todo: 
+* move training data set to preprocess
+* improve Supervised learning with threading
+'''
 
 def read_file(file_path):
 	text = None
