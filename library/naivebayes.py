@@ -31,7 +31,7 @@ todo:
 ''' 
 class OracleClassifier(Classifier):
  	"""OracleClassifier:  language identification classifier using NaiveBayes
- 						  inherits from Classifier super class
+ 			      inherits from Classifier super class
 
  	"""
 	def __init__(self, root_dir, input_text, config_dirs):
