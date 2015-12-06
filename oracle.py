@@ -26,6 +26,8 @@ either English, French or German.
 @todo: 
 * move training data set to preprocess
 * improve Supervised learning with threading
+* implement Sleeper Algorithms
+* implement Unsupervised Unstructured Learning
 '''
 
 def read_file(file_path):
@@ -42,20 +44,44 @@ def main(argv):
 	cprint(figlet_format('Oracle', font='bubble'),
        'green', attrs=['bold'])
 	parser = argparse.ArgumentParser(description="Oracle Language Classifier")
-	parser.add_argument('-f', '--file', help=' /path/to/file/text_file.txt', required=False) #, required=True)
-	parser.add_argument('-i', '--input', help='This is input text to be analyzed by Oracle', required=False) #, required=True)
-	parser.add_argument('-b', '--naivebayes', action='store_true', help="Statistical classifier", required=False)
-	parser.add_argument('-s', '--simple', action='store_true', help="Simple classifier", required=False)
-	parser.add_argument('-v', '--verbose', help="increase output verbosity", required=False)
-	parser.add_argument('-n', '--ngram', action='store_true', help='N-gram classifier', required=False)
-	parser.add_argument('-e', '--sleeper', action='store_true', help='Sleeper expert classifier', required=False)
-	parser.add_argument('-u', '--unstructured', action='store_true', help='Unstructured Text classifier', required=False)
-	parser.add_argument('-c', '--corpus', help='File path to corpus', required=False)
+	parser.add_argument('-f', '--file', 
+			    help=' /path/to/file/text_file.txt', 
+			    required=False)
+	parser.add_argument('-i', '--input', 
+			    help='This is input text to be analyzed by Oracle', 
+			    required=False)
+	parser.add_argument('-b', '--naivebayes', 
+	  		    action='store_true', 
+			    help="Statistical classifier", 
+			    required=False)
+	parser.add_argument('-s', '--simple', 
+			    action='store_true', 
+			    help="Simple classifier", 
+			    required=False)
+	parser.add_argument('-v', '--verbose', 
+	                    help="increase output verbosity", 
+	                    required=False)
+	parser.add_argument('-n', '--ngram', 
+			    action='store_true', 
+			    help='N-gram classifier', 
+			    required=False)
+	parser.add_argument('-e', '--sleeper', 
+			    action='store_true', 
+			    help='Sleeper expert classifier', 
+			    required=False)
+	parser.add_argument('-u', '--unstructured', 
+			    action='store_true', 
+	                    help='Unstructured Text classifier', 
+	                    required=False)
+	parser.add_argument('-c', '--corpus', 
+			    help='File path to corpus', 
+			    required=False)
 
 	args = parser.parse_args()
 
 	if args.input is None and args.file is None:
-		print IOError("No input text or file path provided! \n>>>>> Please enter input text as: \"This is a string\"")
+		print IOError("No input text or file path provided! "
+			      "\n>>>>> Please enter input text as: \"This is a string\"")
 		
 		return
 
@@ -68,7 +94,8 @@ def main(argv):
 		classifer = SimpleSimon(text)
 	elif args.naivebayes:
 		if not args.corpus:
-			print IOError("No corpus file path provided! \n>>>>naivebayes requires training corpus")
+			print IOError("No corpus file path provided!"
+				      "\n>>>>naivebayes requires training corpus")
 			return
 		classifer = OracleClassifier(args.corpus, text)
 		
