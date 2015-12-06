@@ -1,3 +1,9 @@
+'''
+ copyright 2014
+ author: Spiridoula O'Regan
+ email: roula.oregan@gmail.com
+ github user: roulaoregan
+'''
 import operator
 import os
 import re
@@ -25,10 +31,7 @@ class OracleClassifier(object):
 		self.master_word_list = []
 		self.word_features = []
 	
-	# >> REFERENCE:
-	#      http://www.nltk.org/book/ch06.html
-	#      blog: http://www.laurentluce.com/posts/twitter-sentiment-analysis-using-python-and-nltk/
-	###    
+	   
 	def extract_features(self, input_text):
 		document_words = set(input_text)
 		features = {}
@@ -65,16 +68,9 @@ class OracleClassifier(object):
 	def train(self):
 		print "inside train"
 		self.master_word_list = self._assemble()
-		#word_features = get_word_features(
-         #           get_words_in_tweets(tweets))
 		word_features = self.get_word_features(self.get_words())
 		self.word_features = [re.sub(r"([^\w\.\'\-\/,&])", r'', feature) for feature in word_features]
 		self.training_set = classify.apply_features(self.extract_features, self.master_word_list)
-
-		print self.training_set
-		#training_set = nltk.classify.apply_features(extract_features, tweets)
-		#test_set = nltk.classify.apply_features(extract_features, test_tweets)
-    	#classifier = nltk.NaiveBayesClassifier.train(training_set)
 
 		self.classifier = NaiveBayesClassifier.train(self.training_set)
 		
