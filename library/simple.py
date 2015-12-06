@@ -1,3 +1,9 @@
+'''
+ copyright 2014
+ author: Spiridoula O'Regan
+ email: roula.oregan@gmail.com
+ github user: roulaoregan
+'''
 import operator
 import os
 import re
@@ -9,10 +15,12 @@ from library.classifier import Classifier
 from nltk import wordpunct_tokenize
 from nltk.corpus import stopwords
 
-# Simple classifier that uses NLTK stopwords to identify language
-# reference: blog: http://blog.alejandronolla.com/2013/05/15/detecting-text-language-with-python-and-nltk/
 
 class SimpleSimon(Classifier):
+	"""SimpleSimon:  Simple classifier that uses NLTK stopwords to detect language
+ 			 inherits from Classifier super class
+ 			 reference: http://blog.alejandronolla.com
+ 	"""
 	def __init__(self, input_text):
 		Classifier.__init__(self, input_text)
 
