@@ -5,10 +5,15 @@
  github user: roulaoregan
 '''
 #!/usr/bin/python
-import os
-import re
-import sys
 import argparse
+import re
+import os
+import sys
+
+from colorama import init
+init(strip=not sys.stdout.isatty()) # strip colors if stdout is redirected
+from termcolor import cprint 
+from pyfiglet import figlet_format
 
 from library.naivebayes import OracleClassifier
 from library.simple import SimpleSimon
@@ -34,8 +39,9 @@ def read_file(file_path):
 
 
 def main(argv):
-
-	parser = argparse.ArgumentParser(description=">>>>>>>>> ORACLE Language Predictor <<<<<<<<<<<")
+	cprint(figlet_format('Oracle', font='bubble'),
+       'green', attrs=['bold'])
+	parser = argparse.ArgumentParser(description="Oracle Language Classifier")
 	parser.add_argument('-f', '--file', help=' /path/to/file/text_file.txt', required=False) #, required=True)
 	parser.add_argument('-i', '--input', help='This is input text to be analyzed by Oracle', required=False) #, required=True)
 	parser.add_argument('-b', '--naivebayes', action='store_true', help="Statistical classifier", required=False)
