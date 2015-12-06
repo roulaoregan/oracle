@@ -1,3 +1,9 @@
+'''
+ copyright 2014
+ author: Spiridoula O'Regan
+ email: roula.oregan@gmail.com
+ github user: roulaoregan
+'''
 import operator
 import os
 import re
@@ -104,7 +110,7 @@ class NgramClassifier(Classifier):
 
 
 def main():
-	root_dir = "../nltk_data"
+	root_dir = "/Users/spiridoulaoregan/nltk_data"
 	genesis_text = "The path of the righteous man is beset on all sides by the inequities of the \
 					selfish and the tyranny of evil men. Blessed is he who, in the name of charity \
 					and good will, shepherds the weak through the valley of the darkness, for he is \
